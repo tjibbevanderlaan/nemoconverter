@@ -1,0 +1,20 @@
+{
+  "name": "nemoconverter",
+  "version": "1.0.0",
+  "description": "Converts nemo topics from 1.x to 2.x",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "nemo",
+    "topic",
+    "pre-u",
+    "convert",
+    "university",
+    "of",
+    "twente"
+  ],
+  "author": "Tjibbe van der Laan",
+  "license": "ISC"
+}
