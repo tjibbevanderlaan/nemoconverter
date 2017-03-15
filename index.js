@@ -57,9 +57,9 @@
     	}
     	console.log("do dom!");
 
-    	// htmlFileList.forEach(function(file, index) {
-    	var file = htmlFileList[0];
-    	var index = 0;
+    	htmlFileList.forEach(function(file, index) {
+    	// var file = htmlFileList[0];
+    	// var index = 0;
     		fs.readFile(file, 'utf8', function(err, destdata) {
                 if (err) return cb(err);
 
@@ -69,8 +69,19 @@
                 	var src = cheerio.load(srcdata);
                 	var dest = cheerio.load(destdata);
 
+                	var title = src('title').text();
+                	title = title.replace('.', '');
+                	dest('title').text(title); 
+
                 	var srcSlides = src('.slide').not("#commentslide");
+                	var destSlides = dest('.slide');
+
                 	srcSlides.each(function(slideindex, slide) {
+                		if(!destSlides[slideindex]) {
+                			dest(destSlides[slideindex-1]).after('<div class="slide"></div>');
+                			destSlides = dest('.slide');
+                		}
+
                 		var panelcounter = 0;
                 		var paneltopoffset = 0;
                 		src(slide).find(".nm_TextField").each(function(i, node) {
@@ -79,20 +90,29 @@
                 			var width = widthsearch && !isNaN(widthsearch[1]) && parseInt(widthsearch[1]);
                 			var heightsearch = /height\:\s*(\d+)px/gi.exec(style);
                 			var height = heightsearch && !isNaN(heightsearch[1]) && parseInt(heightsearch[1]);
+                			var topsearch = /top\:\s*(\d+)px/gi.exec(style);
+                			var top = topsearch && !isNaN(topsearch[1]) && parseInt(topsearch[1]);
                 			var stay = src(node).attr("stay") && parseInt(src(node).attr("stay"));
                 			var staystr = stay && 'data-stay="' + slideindex + '-' + (slideindex+stay) + '"';
 
                 			var content = src(node).text();
                 			content = content.replace(/\#([^\#]+)\#(\d+)/gi, '<a href="#" class="nm_term" data-term-id="$2">$1</a>');
-                			console.log(content);
+                			
+
+                			var newNodeStr = getPanelString(content,width, height, top, staystr);
+
+                			dest(destSlides[slideindex]).append(newNodeStr);
                 		});
                 	});
 
-
+                	var newDocument = dest.html();
+                	fs.writeFile(file, newDocument, 'utf8', function(err) {
+                		if(err) console.log(err);
+                	});
 
                 });
             });
-    	// });
+    	});
     }
 
     function finalcallback(err) {
@@ -125,11 +145,11 @@
     	return str;
     }
 
-    function getPanelString(content) {
+    function getPanelString(content, width, height, top, datastay) {
     	var uniqueId = 'nm_panel' + elementcounter;
     	elementcounter++;
     	var str = '<div id="' + uniqueId + '" class="panel panel-default" style="width: ' + 
-    	width + 'px; height: auto; top:' + top + 'px; left: 20px"><div class="panel-body">' +
+    	width + 'px; height: ' + (height ? height + "px" : "auto") +'; top:' + top + 'px; left: 20px"' + (datastay ? " " + datastay : "") + '><div class="panel-body">' +
     	 content + '</div></div>';
 
     	return str;
