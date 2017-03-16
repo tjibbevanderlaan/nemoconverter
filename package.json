@@ -15,6 +15,10 @@
     "of",
     "twente"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/tjibbevanderlaan/nemoconverter.git"
+  },
   "author": "Tjibbe van der Laan",
   "license": "ISC",
   "dependencies": {
