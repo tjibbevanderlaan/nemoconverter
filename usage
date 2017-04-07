@@ -1,0 +1,16 @@
+How to use:
+
+1. -> Clone repo to a folder. 
+    Example C:\...\
+    
+2. -> Create folders `src`, `msk` and `dest` in nemoconverter. 
+    In Example C:\...\nemoconverter\
+    
+3. -> Do `npm install` in your command prompt  in the correct destination. (So you need 'node js') 
+    Example `C:\Users\...\nemoconverter>npm install`
+    
+4. -> Now convert! Place the web, animations and images folders into the `src` folder.
+    Example `C:\Users\...\nemoconverter\src
+    
+5. -> Type `node index.js` in the command prompt in the nemoconverter destination.
+    Example `C:\Users\...\nemoconverter>node index.js`
